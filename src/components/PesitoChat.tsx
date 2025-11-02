@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Sparkles, TrendingUp, Bell, Lightbulb } from "lucide-react";
+import { X, Sparkles, TrendingUp, Bell, Lightbulb, Target, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,16 +11,59 @@ interface PesitoChatProps {
   onClose: () => void;
 }
 
+type Message = { text: string; isBot: boolean };
+
 const chatOptions = [
   { id: "consejos", label: "Consejos", icon: Lightbulb, color: "text-yellow-600" },
   { id: "analisis", label: "Análisis de datos", icon: TrendingUp, color: "text-blue-600" },
   { id: "recordatorios", label: "Recordatorios", icon: Bell, color: "text-purple-600" },
-  { id: "alertas", label: "Alertas", icon: Sparkles, color: "text-red-600" }
+  { id: "alertas", label: "Alertas", icon: Sparkles, color: "text-red-600" },
+  { id: "metas", label: "Metas y Estudio (IA)", icon: Target, color: "text-green-700" },
 ];
+
+// --- Utilidades simples para “IA” simulada ---
+const toCOP = (v: number) =>
+  new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v);
+
+function generateGoalPlan(targetCOP: number, months: number) {
+  const monthly = Math.ceil(targetCOP / Math.max(1, months));
+  const weekly = Math.ceil(monthly / 4);
+  const daily = Math.ceil(weekly / 7);
+
+  return [
+    `🎯 **Meta**: Ahorrar ${toCOP(targetCOP)} en ${months} mes(es).`,
+    `📆 **Ritmo sugerido**: ${toCOP(monthly)} / mes · ${toCOP(weekly)} / semana · ${toCOP(daily)} / día.`,
+    `🧩 **Micro-hábitos**:`,
+    `• Redondea compras y guarda el excedente.`,
+    `• 24h de “enfriamiento” antes de compras no esenciales.`,
+    `• Traslada suscripciones poco usadas a plan anual con descuento.`,
+    `• Registra facturas en *Hoy* y clasifícalas (te sube puntos).`,
+    `✅ **Checklist semanal**:`,
+    `1) Revisar top 3 categorías de gasto.`,
+    `2) Ajustar presupuesto del finde (ocio ≤ 20%).`,
+    `3) Hacer 1 compra de abarrotes planificada.`,
+  ].join("\n");
+}
+
+function generateStudyPlan(topic = "Finanzas personales", hoursPerDay = 1) {
+  const blocks = Math.max(1, Math.floor((hoursPerDay * 60) / 25)); // Pomodoros de 25 min
+  return [
+    `📚 **Plan de estudio – ${topic}**`,
+    `⏱️ **Rutina diaria**: ${hoursPerDay}h ≈ ${blocks} bloques Pomodoro (25' + 5' pausa).`,
+    `🗓️ **Estructura (4 semanas)**:`,
+    `• Semana 1: Fundamentos y vocabulario clave.`,
+    `• Semana 2: Casos prácticos, ejercicios guiados.`,
+    `• Semana 3: Proyecto mini (presupuesto, dashboard, etc.).`,
+    `• Semana 4: Simulacros, repasos espaciados y evaluación.`,
+    `🧠 **Técnicas**: Active recall, spaced repetition (Anki), Feynman.`,
+    `🎯 **Entregables**: 1 resumen semanal + 1 mini-proyecto final.`,
+    `💡 **Tip**: Estudia en el mismo horario, app de foco y notificaciones en Modo No Molestar.`,
+  ].join("\n");
+}
 
 const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Array<{ text: string; isBot: boolean }>>([
+  const [messages, setMessages] = useState<Message[]>([
     { text: "¡Hola! Soy Pesito, tu asistente financiero personal. ¿En qué puedo ayudarte hoy?", isBot: true }
   ]);
   const [input, setInput] = useState("");
@@ -28,33 +71,43 @@ const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
   const handleOptionClick = (optionId: string) => {
     setSelectedOption(optionId);
     const option = chatOptions.find(opt => opt.id === optionId);
-    
-    if (option) {
-      setMessages(prev => [
-        ...prev,
-        { text: option.label, isBot: false }
-      ]);
 
-      // Respuestas simuladas de Pesito
-      setTimeout(() => {
-        let response = "";
-        switch (optionId) {
-          case "consejos":
-            response = "¡Claro! Basado en tus facturas de hoy, gasté $47,100 COP. Te recomiendo establecer un límite diario de $40,000 para cumplir tus metas de ahorro. 💰";
-            break;
-          case "analisis":
-            response = "He analizado tus gastos y veo que el 100% se va en alimentos. Considera preparar comidas en casa para ahorrar hasta 30% mensualmente. 📊";
-            break;
-          case "recordatorios":
-            response = "Tienes una meta de ahorro de $500,000 este mes. Llevas el 45% completado. ¡Vas muy bien! 🎯";
-            break;
-          case "alertas":
-            response = "⚠️ Has gastado un 20% más que el promedio semanal. Te sugiero reducir gastos no esenciales en los próximos días.";
-            break;
-        }
-        setMessages(prev => [...prev, { text: response, isBot: true }]);
-      }, 1000);
-    }
+    if (!option) return;
+
+    setMessages(prev => [...prev, { text: option.label, isBot: false }]);
+
+    // Respuestas simuladas
+    setTimeout(() => {
+      if (optionId === "consejos") {
+        setMessages(prev => [...prev, { text: "¡Claro! Basado en tus facturas de hoy, gastaste $47,100 COP. Te sugiero límite diario de $40,000 para cumplir tu meta de ahorro. 💰", isBot: true }]);
+      } else if (optionId === "analisis") {
+        setMessages(prev => [...prev, { text: "Analicé tus gastos: 100% en alimentos hoy. Cocinar en casa puede ahorrarte ~30% mensual. 📊", isBot: true }]);
+      } else if (optionId === "recordatorios") {
+        setMessages(prev => [...prev, { text: "Tienes una meta de $500,000 este mes. Llevas 45% completado. ¡Vas muy bien! 🎯", isBot: true }]);
+      } else if (optionId === "alertas") {
+        setMessages(prev => [...prev, { text: "⚠️ Gastaste un 20% más que tu promedio semanal. Reduce gastos no esenciales los próximos días.", isBot: true }]);
+      } else if (optionId === "metas") {
+        // Flujo IA simulado: metas + estudio
+        const goal = generateGoalPlan(500000, 1);
+        const study = generateStudyPlan("Estadística y Finanzas", 1.5);
+        setMessages(prev => [
+          ...prev,
+          { text: "Estoy generando tu plan de metas y estudio… 🤖", isBot: true }
+        ]);
+        setTimeout(() => {
+          setMessages(prev => [...prev, { text: goal, isBot: true }]);
+          setTimeout(() => {
+            setMessages(prev => [...prev, { text: study, isBot: true }]);
+            setTimeout(() => {
+              setMessages(prev => [
+                ...prev,
+                { text: "¿Quieres que te cree recordatorios automáticos semanales y un checklist diario? Puedo hacerlo. ✅", isBot: true }
+              ]);
+            }, 800);
+          }, 800);
+        }, 800);
+      }
+    }, 800);
   };
 
   const handleBackToOptions = () => {
@@ -65,17 +118,18 @@ const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
   };
 
   const handleSendMessage = () => {
-    if (input.trim()) {
-      setMessages(prev => [...prev, { text: input, isBot: false }]);
-      setInput("");
-      
-      setTimeout(() => {
-        setMessages(prev => [
-          ...prev,
-          { text: "Entiendo tu pregunta. Estoy procesando la información... En una versión completa, podría darte un análisis detallado basado en tus datos reales. 🤖", isBot: true }
-        ]);
-      }, 1000);
-    }
+    if (!input.trim()) return;
+    const userMsg = input;
+    setMessages(prev => [...prev, { text: userMsg, isBot: false }]);
+    setInput("");
+
+    // Respuesta simulada genérica
+    setTimeout(() => {
+      setMessages(prev => [
+        ...prev,
+        { text: "Entiendo tu pregunta. Estoy procesando la información… En una versión completa, usaría tus datos reales para personalizarte el plan. 🤖", isBot: true }
+      ]);
+    }, 900);
   };
 
   if (!isOpen) return null;
@@ -152,7 +206,7 @@ const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
                   </div>
                 )}
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                  className={`max-w-[80%] rounded-2xl px-4 py-2 whitespace-pre-wrap ${
                     message.isBot
                       ? "bg-muted text-foreground"
                       : "bg-gradient-to-r from-primary to-primary-dark text-primary-foreground"
@@ -171,8 +225,8 @@ const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-              placeholder="Escribe tu mensaje..."
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+              placeholder="Escribe tu mensaje…"
               className="flex-1"
             />
             <Button
