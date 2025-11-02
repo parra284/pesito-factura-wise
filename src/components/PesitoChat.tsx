@@ -40,10 +40,10 @@ const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
         let response = "";
         switch (optionId) {
           case "consejos":
-            response = "¡Claro! Basado en tus facturas de hoy, gasté $250,000 COP. Te recomiendo establecer un límite diario de $200,000 para cumplir tus metas de ahorro. 💰";
+            response = "¡Claro! Basado en tus facturas de hoy, gasté $47,100 COP. Te recomiendo establecer un límite diario de $40,000 para cumplir tus metas de ahorro. 💰";
             break;
           case "analisis":
-            response = "He analizado tus gastos y veo que el 50% se va en alimentos. Considera preparar comidas en casa para ahorrar hasta 30% mensualmente. 📊";
+            response = "He analizado tus gastos y veo que el 100% se va en alimentos. Considera preparar comidas en casa para ahorrar hasta 30% mensualmente. 📊";
             break;
           case "recordatorios":
             response = "Tienes una meta de ahorro de $500,000 este mes. Llevas el 45% completado. ¡Vas muy bien! 🎯";
@@ -55,6 +55,13 @@ const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
         setMessages(prev => [...prev, { text: response, isBot: true }]);
       }, 1000);
     }
+  };
+
+  const handleBackToOptions = () => {
+    setSelectedOption(null);
+    setMessages([
+      { text: "¡Hola! Soy Pesito, tu asistente financiero personal. ¿En qué puedo ayudarte hoy?", isBot: true }
+    ]);
   };
 
   const handleSendMessage = () => {
@@ -98,27 +105,38 @@ const PesitoChat = ({ isOpen, onClose }: PesitoChatProps) => {
         </div>
 
         {/* Chat Options */}
-        {!selectedOption && (
-          <div className="p-4 border-b border-border bg-muted/30">
-            <p className="text-sm text-muted-foreground mb-3">Selecciona una opción:</p>
-            <div className="grid grid-cols-2 gap-2">
-              {chatOptions.map((option) => {
-                const Icon = option.icon;
-                return (
-                  <Button
-                    key={option.id}
-                    variant="outline"
-                    onClick={() => handleOptionClick(option.id)}
-                    className="flex items-center gap-2 justify-start h-auto py-3 hover:bg-primary/10 hover:border-primary transition-all"
-                  >
-                    <Icon className={`h-4 w-4 ${option.color}`} />
-                    <span className="text-sm">{option.label}</span>
-                  </Button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        <div className="p-4 border-b border-border bg-muted/30">
+          {selectedOption && (
+            <Button
+              variant="ghost"
+              onClick={handleBackToOptions}
+              className="mb-3 text-primary hover:text-primary-dark hover:bg-primary/10"
+            >
+              ← Volver a opciones
+            </Button>
+          )}
+          {!selectedOption && (
+            <>
+              <p className="text-sm text-muted-foreground mb-3">Selecciona una opción:</p>
+              <div className="grid grid-cols-2 gap-2">
+                {chatOptions.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <Button
+                      key={option.id}
+                      variant="outline"
+                      onClick={() => handleOptionClick(option.id)}
+                      className="flex items-center gap-2 justify-start h-auto py-3 hover:bg-primary/10 hover:border-primary transition-all"
+                    >
+                      <Icon className={`h-4 w-4 ${option.color}`} />
+                      <span className="text-sm">{option.label}</span>
+                    </Button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* Messages */}
         <ScrollArea className="flex-1 p-4 min-h-[300px]">

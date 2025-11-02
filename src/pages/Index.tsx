@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Shield, Sparkles } from "lucide-react";
+import inBioLogo from "@/assets/in-bio-logo.png";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -10,17 +11,17 @@ const Index = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           {/* Logo/Icon */}
-          <div className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-xl">
-            <span className="text-5xl font-bold text-primary-foreground">₱</span>
+          <div className="mx-auto w-32 h-32 flex items-center justify-center">
+            <img src={inBioLogo} alt="In-Bio" className="w-full h-full object-contain" />
           </div>
 
           {/* Hero Text */}
           <div className="space-y-4">
             <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
-              Bienvenido a Pesito
+              Bienvenido a In-Bio
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
-              Tu asistente financiero personal impulsado por IA para gestionar tus facturas y mejorar tus finanzas
+              Tu asistente financiero personal con Pesito, la IA que te ayuda a gestionar tus facturas y mejorar tus finanzas
             </p>
           </div>
 

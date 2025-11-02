@@ -2,32 +2,42 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Receipt } from "lucide-react";
+import factura1 from "@/assets/factura1.jpeg";
+import factura2 from "@/assets/factura2.jpeg";
 
-// Mock data para facturas
+// Mock data para facturas con imágenes reales
 const mockInvoices = [
   {
     id: 1,
-    vendor: "Supermercado Central",
-    amount: 125000,
-    date: "2025-11-02",
+    vendor: "Gastronomía Italiana",
+    amount: 39900,
+    date: "2025-11-01",
     category: "Alimentos",
-    image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400"
+    image: factura1
   },
   {
     id: 2,
-    vendor: "Farmacia Salud",
-    amount: 45000,
-    date: "2025-11-02",
-    category: "Salud",
-    image: "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400"
+    vendor: "Carolina Cruz",
+    amount: 7200,
+    date: "2025-11-01",
+    category: "Alimentos",
+    image: factura2
   },
   {
     id: 3,
-    vendor: "Gasolinera Express",
-    amount: 80000,
-    date: "2025-11-02",
-    category: "Transporte",
-    image: "https://images.unsplash.com/photo-1628618361928-e0a37dca7391?w=400"
+    vendor: "Gastronomía Italiana",
+    amount: 39900,
+    date: "2025-11-01",
+    category: "Alimentos",
+    image: factura1
+  },
+  {
+    id: 4,
+    vendor: "Carolina Cruz",
+    amount: 7200,
+    date: "2025-11-01",
+    category: "Alimentos",
+    image: factura2
   }
 ];
 

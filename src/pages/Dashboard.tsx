@@ -4,6 +4,7 @@ import InvoiceCarousel from "@/components/InvoiceCarousel";
 import InvoiceHistory from "@/components/InvoiceHistory";
 import PesitoButton from "@/components/PesitoButton";
 import PesitoChat from "@/components/PesitoChat";
+import inBioLogo from "@/assets/in-bio-logo.png";
 
 const Dashboard = () => {
   const [showHistory, setShowHistory] = useState(false);
@@ -16,11 +17,11 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-md">
-                <span className="text-2xl font-bold text-primary-foreground">₱</span>
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img src={inBioLogo} alt="In-Bio" className="w-full h-full object-contain" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Pesito</h1>
+                <h1 className="text-2xl font-bold text-foreground">In-Bio</h1>
                 <p className="text-sm text-muted-foreground">Tu asistente financiero</p>
               </div>
             </div>

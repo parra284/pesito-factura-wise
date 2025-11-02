@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import inBioLogo from "@/assets/in-bio-logo.png";
 
 const Login = () => {
   const [identification, setIdentification] = useState("");
@@ -30,11 +31,11 @@ const Login = () => {
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-primary/10 p-4">
       <Card className="w-full max-w-md shadow-lg border-border/50">
         <CardHeader className="space-y-3 text-center">
-          <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-md">
-            <span className="text-4xl font-bold text-primary-foreground">₱</span>
+          <div className="mx-auto w-24 h-24 flex items-center justify-center">
+            <img src={inBioLogo} alt="In-Bio" className="w-full h-full object-contain" />
           </div>
           <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-            Pesito
+            In-Bio
           </CardTitle>
           <CardDescription className="text-base">
             Tu asistente financiero personal
@@ -70,6 +71,17 @@ const Login = () => {
             >
               Iniciar Sesión
             </Button>
+
+            <div className="text-center pt-2">
+              <Button
+                type="button"
+                variant="link"
+                onClick={() => navigate("/register")}
+                className="text-muted-foreground hover:text-primary"
+              >
+                No estoy registrado
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>

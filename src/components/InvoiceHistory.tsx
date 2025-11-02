@@ -1,34 +1,40 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Receipt } from "lucide-react";
+import factura1 from "@/assets/factura1.jpeg";
+import factura2 from "@/assets/factura2.jpeg";
 
 // Mock data para historial de facturas
 const mockHistory = [
   {
     date: "2025-11-02",
     invoices: [
-      { id: 1, vendor: "Supermercado Central", amount: 125000, category: "Alimentos" },
-      { id: 2, vendor: "Farmacia Salud", amount: 45000, category: "Salud" },
-      { id: 3, vendor: "Gasolinera Express", amount: 80000, category: "Transporte" }
+      { id: 1, vendor: "Gastronomía Italiana", amount: 39900, category: "Alimentos", image: factura1 },
+      { id: 2, vendor: "Carolina Cruz", amount: 7200, category: "Alimentos", image: factura2 },
+      { id: 3, vendor: "Gastronomía Italiana", amount: 39900, category: "Alimentos", image: factura1 }
     ]
   },
   {
     date: "2025-11-01",
     invoices: [
-      { id: 4, vendor: "Restaurante Del Sol", amount: 65000, category: "Alimentos" },
-      { id: 5, vendor: "Tienda de Ropa", amount: 150000, category: "Vestuario" }
+      { id: 4, vendor: "Carolina Cruz", amount: 7200, category: "Alimentos", image: factura2 },
+      { id: 5, vendor: "Gastronomía Italiana", amount: 39900, category: "Alimentos", image: factura1 }
     ]
   },
   {
     date: "2025-10-31",
     invoices: [
-      { id: 6, vendor: "Librería Estudiante", amount: 35000, category: "Educación" },
-      { id: 7, vendor: "Café Aroma", amount: 18000, category: "Alimentos" },
-      { id: 8, vendor: "Cine Megaplex", amount: 28000, category: "Entretenimiento" }
+      { id: 6, vendor: "Carolina Cruz", amount: 7200, category: "Alimentos", image: factura2 },
+      { id: 7, vendor: "Gastronomía Italiana", amount: 39900, category: "Alimentos", image: factura1 },
+      { id: 8, vendor: "Carolina Cruz", amount: 7200, category: "Alimentos", image: factura2 }
     ]
   }
 ];
 
 const InvoiceHistory = () => {
+  const [selectedInvoice, setSelectedInvoice] = useState<{ vendor: string; image: string } | null>(null);
+
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-foreground">Historial de Facturas</h2>
@@ -49,6 +55,7 @@ const InvoiceHistory = () => {
               <Card 
                 key={invoice.id} 
                 className="hover:shadow-md transition-all duration-300 border-border/50 hover:border-primary/30 cursor-pointer"
+                onClick={() => setSelectedInvoice({ vendor: invoice.vendor, image: invoice.image })}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -78,6 +85,23 @@ const InvoiceHistory = () => {
           </div>
         </div>
       ))}
+
+      <Dialog open={!!selectedInvoice} onOpenChange={() => setSelectedInvoice(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>{selectedInvoice?.vendor}</DialogTitle>
+          </DialogHeader>
+          {selectedInvoice && (
+            <div className="mt-4">
+              <img 
+                src={selectedInvoice.image} 
+                alt={selectedInvoice.vendor}
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
