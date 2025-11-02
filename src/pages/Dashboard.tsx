@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import InvoiceCarousel from "@/components/InvoiceCarousel";
 import InvoiceHistory from "@/components/InvoiceHistory";
+import PointsRewards from "@/components/PointsRewards";
 import PesitoButton from "@/components/PesitoButton";
 import PesitoChat from "@/components/PesitoChat";
 import inBioLogo from "@/assets/in-bio-logo.png";
 
 const Dashboard = () => {
-  const [showHistory, setShowHistory] = useState(false);
+  const [activeTab, setActiveTab] = useState<"today" | "history" | "points">("today");
   const [showChat, setShowChat] = useState(false);
 
   return (
@@ -31,32 +32,47 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        {!showHistory ? (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold text-foreground">Facturas de Hoy</h2>
-              <Button
-                variant="outline"
-                onClick={() => setShowHistory(true)}
-                className="border-primary/30 text-primary hover:bg-primary/10 hover:border-primary"
-              >
-                Ver Historial Completo
-              </Button>
-            </div>
-            <InvoiceCarousel />
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <Button
-              variant="ghost"
-              onClick={() => setShowHistory(false)}
-              className="text-primary hover:text-primary-dark hover:bg-primary/10"
-            >
-              ← Volver a Facturas de Hoy
-            </Button>
-            <InvoiceHistory />
-          </div>
-        )}
+        {/* Navigation Tabs */}
+        <div className="flex gap-2 mb-6 border-b border-border/50">
+          <Button
+            variant="ghost"
+            onClick={() => setActiveTab("today")}
+            className={`rounded-b-none border-b-2 transition-colors ${
+              activeTab === "today" 
+                ? "border-primary text-primary" 
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Facturas de Hoy
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => setActiveTab("history")}
+            className={`rounded-b-none border-b-2 transition-colors ${
+              activeTab === "history" 
+                ? "border-primary text-primary" 
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Historial
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => setActiveTab("points")}
+            className={`rounded-b-none border-b-2 transition-colors ${
+              activeTab === "points" 
+                ? "border-primary text-primary" 
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Tus Puntos
+          </Button>
+        </div>
+
+        {/* Content */}
+        {activeTab === "today" && <InvoiceCarousel />}
+        {activeTab === "history" && <InvoiceHistory />}
+        {activeTab === "points" && <PointsRewards />}
       </main>
 
       {/* Pesito Bot Button */}

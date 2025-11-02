@@ -87,7 +87,7 @@ const InvoiceHistory = () => {
       ))}
 
       <Dialog open={!!selectedInvoice} onOpenChange={() => setSelectedInvoice(null)}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{selectedInvoice?.vendor}</DialogTitle>
           </DialogHeader>
@@ -96,7 +96,7 @@ const InvoiceHistory = () => {
               <img 
                 src={selectedInvoice.image} 
                 alt={selectedInvoice.vendor}
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto rounded-lg border border-border/30"
               />
             </div>
           )}
