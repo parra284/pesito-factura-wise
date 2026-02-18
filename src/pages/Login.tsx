@@ -33,9 +33,19 @@ const Login = () => {
     }
 
     setLoading(true);
+
+    // ── Acceso de demo ──────────────────────────────────────────────
+    if (identification === "12345678" && password === "12345678") {
+      toast.success("¡Bienvenido a In-Bio! (modo demo)");
+      navigate("/dashboard");
+      setLoading(false);
+      return;
+    }
+    // ────────────────────────────────────────────────────────────────
+
     try {
       await login(identification, password);
-      toast.success("¡Bienvenido a Pesito!");
+      toast.success("¡Bienvenido a In-Bio!");
       navigate("/dashboard");
     } catch (error: any) {
       console.error(error);
